@@ -1,10 +1,11 @@
 <?php
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+define('BASE_PATH', dirname(__DIR__));
 
-use MaxymShevchuk\Framework\Http\Kernel;
-use MaxymShevchuk\Framework\Http\Request;
-use MaxymShevchuk\Framework\Http\Response;
+require_once BASE_PATH . '/vendor/autoload.php';
+
+use SimplePhpFramework\Http\Kernel;
+use SimplePhpFramework\Http\Request;
 
 $request = Request::createFromGlobals();
 

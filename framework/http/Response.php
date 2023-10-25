@@ -1,6 +1,6 @@
 <?php
 
-namespace MaxymShevchuk\Framework\Http;
+namespace SimplePhpFramework\Http;
 
 class Response
 {
