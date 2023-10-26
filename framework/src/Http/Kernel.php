@@ -2,10 +2,8 @@
 
 namespace SimplePhpFramework\Http;
 
-use FastRoute\RouteCollector;
 use SimplePhpFramework\Http\Exceptions\HttpException;
 use SimplePhpFramework\Routing\RouterInterface;
-use function FastRoute\simpleDispatcher;
 
 class Kernel
 {
