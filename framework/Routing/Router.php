@@ -16,9 +16,12 @@ class Router implements RouterInterface
     {
         [$handler, $vars] = $this->extractRouteInfo($request);
 
-        [$controller, $method] = $handler;
+        if (is_array($handler)) {
+            [$controller, $method] = $handler;
+            $handler = [new $controller, $method];
+        }
 
-        return [[new $controller, $method], $vars];
+        return [$handler, $vars];
     }
 
     /**
@@ -35,19 +38,23 @@ class Router implements RouterInterface
             }
         });
 
-        $routerInfo = $dispatcher->dispatch(
+        $routeInfo = $dispatcher->dispatch(
             $request->getMethod(),
             $request->getPath(),
         );
 
-        switch ($routerInfo[0]) {
+        switch ($routeInfo[0]) {
             case Dispatcher::FOUND:
-                return [$routerInfo[1], $routerInfo[2]];
+                return [$routeInfo[1], $routeInfo[2]];
             case Dispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = implode(', ', $routerInfo[1]);
-                throw new MethodNotAllowedException("Supported HTTP methods: {$allowedMethods}");
+                $allowedMethods = implode(', ', $routeInfo[1]);
+                $e = new MethodNotAllowedException("Supported HTTP methods: $allowedMethods");
+                $e->setStatusCode(405);
+                throw $e;
             default:
-                throw new RouteNotFoundException('Route not found');
+                $e = new RouteNotFoundException('Route not found');
+                $e->setStatusCode(404);
+                throw $e;
         }
     }
 }

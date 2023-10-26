@@ -3,6 +3,7 @@
 namespace SimplePhpFramework\Http;
 
 use FastRoute\RouteCollector;
+use SimplePhpFramework\Http\Exceptions\HttpException;
 use SimplePhpFramework\Routing\RouterInterface;
 use function FastRoute\simpleDispatcher;
 
@@ -20,8 +21,10 @@ class Kernel
             [$routeHandler, $vars] = $this->router->dispatch($request);
 
             $response = call_user_func_array($routeHandler, $vars);
-        } catch (\Throwable $exception) {
-            $response = new Response($exception->getMessage(), statusCode: 500);
+        } catch (HttpException $e) {
+            $response = new Response($e->getMessage(), $e->getStatusCode());
+        } catch (\Throwable $e) {
+            $response = new Response($e->getMessage(), 500);
         }
 
         return $response;
