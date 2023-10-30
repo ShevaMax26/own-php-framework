@@ -2,7 +2,7 @@
 
 namespace SimplePhpFramework\Tests;
 
-class SomeClass
+class YouTube
 {
 
 }
