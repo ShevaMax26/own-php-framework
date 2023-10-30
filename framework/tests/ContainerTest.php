@@ -12,9 +12,9 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->add('some-class', ServiceClass::class);
+        $container->add('service-class', ServiceClass::class);
 
-        $this->assertInstanceOf(ServiceClass::class, $container->get('some-class'));
+        $this->assertInstanceOf(ServiceClass::class, $container->get('service-class'));
     }
 
     public function test_container_has_exception_ContainerException_id_add_wrong_service()
@@ -30,9 +30,9 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->add('some-class', ServiceClass::class);
+        $container->add('service-class', ServiceClass::class);
 
-        $this->assertTrue($container->has('some-class'));
+        $this->assertTrue($container->has('service-class'));
 
         $this->assertFalse($container->has('no-class'));
     }
@@ -41,14 +41,14 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->add('some-class', ServiceClass::class);
+        $container->add('service-class', ServiceClass::class);
 
-        /** @var ServiceClass $someClass */
-        $someClass = $container->get('some-class');
+        /** @var ServiceClass $service */
+        $service = $container->get('service-class');
 
-        $socialNetworks = $someClass->getSocialNetwork();
+        $socialNetworks = $service->getSocialNetwork();
 
-        $this->assertInstanceOf(SocialNetwork::class, $someClass->getSocialNetwork());
+        $this->assertInstanceOf(SocialNetwork::class, $service->getSocialNetwork());
         $this->assertInstanceOf(Telegram::class, $socialNetworks->getTelegram());
         $this->assertInstanceOf(YouTube::class, $socialNetworks->getYouTube());
     }
