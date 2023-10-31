@@ -7,9 +7,14 @@ use League\Container\ReflectionContainer;
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Routing\Router;
 use SimplePhpFramework\Routing\RouterInterface;
+use Symfony\Component\Dotenv\Dotenv;
 
-// Application params
-$routes = include BASE_PATH . '/routes/web.php';
+$dotenv = new Dotenv();
+$dotenv->load(BASE_PATH.'/.env');
+
+// Application parameters
+
+$routes = include BASE_PATH.'/routes/web.php';
 
 // Application services
 
@@ -17,7 +22,9 @@ $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
 
-$container->add('APP_ENV', new StringArgument('production'));
+$appEnv = $_ENV['APP_ENV'] ?? 'local';
+
+$container->add('APP_ENV', new StringArgument($appEnv));
 
 $container->add(RouterInterface::class, Router::class);
 
