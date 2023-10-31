@@ -9,9 +9,12 @@ use SimplePhpFramework\Http\Request;
 use SimplePhpFramework\Routing\Router;
 
 $request = Request::createFromGlobals();
-$router = new Router();
 
+$container = require BASE_PATH . '/config/services.php';
+
+$router = new Router();
 $kernel = new Kernel($router);
+
 $response = $kernel->handle($request);
 
 $response->send();
