@@ -16,10 +16,8 @@ class HomeController extends AbstractController
 
     public function index(): Response
     {
-        dd($this->container->get('twig'));
-        $content = '<h1>Hello, World!</h1><br>';
-        $content .= "<a href=\"{$this->youTube->getChannelUrl()}\">YouTube</a>";
-
-        return new Response($content);
+        return $this->render('home.html.twig', [
+            'youTubeChannel' => $this->youTube->getChannelUrl(),
+        ]);
     }
 }
