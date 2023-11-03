@@ -6,7 +6,6 @@ require_once BASE_PATH . '/vendor/autoload.php';
 
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Http\Request;
-use SimplePhpFramework\Routing\Router;
 
 $request = Request::createFromGlobals();
 

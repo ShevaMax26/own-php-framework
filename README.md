@@ -25,3 +25,12 @@ Simple PHP framework
 
 ### Router
 В якості роутера використовується пакет `nikic/fast-route`
+
+### Dependency Injection Container
+Для контейнера використали пакет `league/container`, який імплементує `psr/container` (PSR-11).
+
+### Dotenv Component
+Використали пакет `symfony/dotenv`, який дає з
+
+### Twig
+В якості шаблонізатора обрано `twig/twig`. Twig зручний для розробників, дотримується принципів PHP і надає функції, корисні для середовищ шаблонів.
