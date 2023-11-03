@@ -4,6 +4,7 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Routing\Router;
 use SimplePhpFramework\Routing\RouterInterface;
@@ -41,9 +42,10 @@ $container->add(Kernel::class)
 $container->addShared('twig-loader', FilesystemLoader::class)
     ->addArgument(new StringArgument($viewsPath));
 
-$container->addShared(Environment::class)
+$container->addShared('twig', Environment::class)
     ->addArgument('twig-loader');
 
-//dd($container->get('twig-loader'));
+$container->inflector(AbstractController::class)
+    ->invokeMethod('setContainer', [$container]);
 
 return $container;

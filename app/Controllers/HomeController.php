@@ -3,20 +3,20 @@
 namespace App\Controllers;
 
 use App\Services\YouTubeService;
+use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Http\Response;
 use Twig\Environment;
 
-class HomeController
+class HomeController extends AbstractController
 {
     public function __construct(
         private readonly YouTubeService $youTube,
-        private readonly Environment $twig
     ) {
     }
 
     public function index(): Response
     {
-        dd($this->twig);
+        dd($this->container->get('twig'));
         $content = '<h1>Hello, World!</h1><br>';
         $content .= "<a href=\"{$this->youTube->getChannelUrl()}\">YouTube</a>";
 
