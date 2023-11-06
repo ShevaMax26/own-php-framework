@@ -5,6 +5,7 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use SimplePhpFramework\Console\Application;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Dbal\ConnectionFactory;
 use SimplePhpFramework\Http\Kernel;
@@ -13,6 +14,7 @@ use SimplePhpFramework\Routing\RouterInterface;
 use Symfony\Component\Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use SimplePhpFramework\Console\Kernel as ConsoleKernel;
 
 $dotenv = new Dotenv();
 $dotenv->load(BASE_PATH.'/.env');
@@ -42,6 +44,8 @@ $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
 
+$container->add('framework-commands-namespace', new StringArgument('SimplePhpFramework\\Console\\Commands\\'));
+
 
 $container->add('APP_ENV', new StringArgument($appEnv));
 
@@ -69,5 +73,12 @@ $container->add(ConnectionFactory::class)
 $container->addShared(Connection::class, function () use ($container): Connection {
     return $container->get(ConnectionFactory::class)->create();
 });
+
+$container->add(Application::class)
+    ->addArgument($container);
+
+$container->add(ConsoleKernel::class)
+    ->addArgument($container)
+    ->addArgument(Application::class);
 
 return $container;
