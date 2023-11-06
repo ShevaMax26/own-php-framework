@@ -1,0 +1,32 @@
+#!/usr/bin/env php
+
+<?php
+
+// 1. Встановити базовий шлях
+
+use SimplePhpFramework\Console\Kernel;
+
+define('BASE_PATH', dirname(__FILE__));
+
+// 2. Додати autoloader
+
+require_once BASE_PATH . '/vendor/autoload.php';
+
+// 3. Додати контейнер
+
+/** @var \League\Container\Container $container */
+$container = require BASE_PATH . '/config/services.php';
+
+// 4. Отримати Kernel з консолі контейнера
+
+$kernel = $container->get(Kernel::class);
+
+
+// 5. Викликати метод handle в Kernel, вернути код статуса консольного додатку
+
+$status = $kernel->handle();
+
+
+// 6. Вийти з цим статусом
+
+exit($status);
