@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "maxymshevchuk/simple-php-framework": "dev-main"
+        "maxymshevchuk/simple-php-framework": "dev-main",
+        "filp/whoops": "^2.15"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.3",
