@@ -32,6 +32,6 @@ services:
       MYSQL_DATABASE: simple_php_framework
       MYSQL_ROOT_PASSWORD: root
     ports:
-        - 3306:3306
+        - 3310:3306
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     container_name: simple_php_framework_db

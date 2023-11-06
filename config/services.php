@@ -1,10 +1,12 @@
 <?php
 
+use Doctrine\DBAL\Connection;
 use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
 use SimplePhpFramework\Controller\AbstractController;
+use SimplePhpFramework\Dbal\ConnectionFactory;
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Routing\Router;
 use SimplePhpFramework\Routing\RouterInterface;
@@ -20,6 +22,13 @@ $dotenv->load(BASE_PATH.'/.env');
 $routes = include BASE_PATH.'/routes/web.php';
 $appEnv = $_ENV['APP_ENV'] ?? 'local';
 $viewsPath = BASE_PATH . '/views';
+$connectionParams = [
+    'dbname' => $_ENV['DB_DATABASE'],
+    'user' => $_ENV['DB_USERNAME'],
+    'password' => $_ENV['DB_PASSWORD'],
+    'host' => $_ENV['DB_HOST'] . ':' . $_ENV['DB_PORT'],
+    'driver' => $_ENV['DB_DRIVER'],
+];
 
 // Application services
 
@@ -47,5 +56,12 @@ $container->addShared('twig', Environment::class)
 
 $container->inflector(AbstractController::class)
     ->invokeMethod('setContainer', [$container]);
+
+$container->add(ConnectionFactory::class)
+    ->addArgument(new ArrayArgument($connectionParams));
+
+$container->addShared(Connection::class, function () use ($container): Connection {
+    return $container->get(ConnectionFactory::class)->create();
+});
 
 return $container;
