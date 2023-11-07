@@ -13,21 +13,41 @@ class MigrateCommand implements CommandInterface
     private const MIGRATIONS_TABLE = 'migrations';
 
     public function __construct(
-        private Connection $connection
+        private Connection $connection,
+        private string $migrationsPath
     )
     {
     }
 
     public function execute(array $parameters = []): int
     {
-        // 1. Створити таблицю міграцій (migrations), якщо таблиця ще не існує
-        $this->createMigrationsTable();
+        try {
+            // 1. Створити таблицю міграцій (migrations), якщо таблиця ще не існує
 
-        // 2. Отримати $appliedMigrations (міграції, які вже є в таблиці migrations)
+            $this->createMigrationsTable();
 
-        // 3. Отримати $migrationFiles з папки міграцій
+            $this->connection->beginTransaction();
 
-        // 4. Отримати міграції для використання
+            // 2. Отримати $appliedMigrations (міграції, які вже є в таблиці migrations)
+
+            $appliedMigrations = $this->getAppliedMigrations();
+
+            // 3. Отримати $migrationFiles з папки міграцій
+
+            $migrationFiles = $this->getMigrationFiles();
+
+
+            // 4. Отримати міграції для використання
+
+            $migrationsToApply = array_values(array_diff($migrationFiles, $appliedMigrations));
+            
+            $this->connection->commit();
+        } catch (\Throwable $e) {
+            $this->connection->rollBack();
+
+            throw $e;
+        }
+
 
         return 0;
     }
@@ -55,5 +75,27 @@ class MigrateCommand implements CommandInterface
 
             echo 'Migrations table created';
         }
+    }
+
+    private function getAppliedMigrations(): array
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+
+        return $queryBuilder
+            ->select('migration')
+            ->from(self::MIGRATIONS_TABLE)
+            ->executeQuery()
+            ->fetchFirstColumn();
+    }
+
+    private function getMigrationFiles(): array
+    {
+        $migrationFiles = scandir($this->migrationsPath);
+
+        $filteredFiles = array_filter($migrationFiles, function ($fileName) {
+            return ! in_array($fileName, ['.', '..']);
+        });
+
+        return array_values($filteredFiles);
     }
 }
