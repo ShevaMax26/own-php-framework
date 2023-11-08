@@ -2,18 +2,23 @@
 
 namespace SimplePhpFramework\Controller;
 
-use League\Container\Container;
 use Psr\Container\ContainerInterface;
+use SimplePhpFramework\Http\Request;
 use SimplePhpFramework\Http\Response;
-use Twig\Environment;
 
 abstract class AbstractController
 {
     protected ?ContainerInterface $container = null;
+    protected Request $request;
 
     public function setContainer(ContainerInterface $container): void
     {
         $this->container = $container;
+    }
+
+    public function setRequest(Request $request): void
+    {
+        $this->request = $request;
     }
 
     public function render(string $view, array $parameters = [], Response $response = null): Response

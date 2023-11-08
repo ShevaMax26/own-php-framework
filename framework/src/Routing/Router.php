@@ -5,6 +5,7 @@ namespace SimplePhpFramework\Routing;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use League\Container\Container;
+use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Http\Exceptions\MethodNotAllowedException;
 use SimplePhpFramework\Http\Exceptions\RouteNotFoundException;
 use SimplePhpFramework\Http\Request;
@@ -21,6 +22,11 @@ class Router implements RouterInterface
         if (is_array($handler)) {
             [$controllerId, $method] = $handler;
             $controller = $container->get($controllerId);
+
+            if (is_subclass_of($controller, AbstractController::class)) {
+                $controller->setRequest($request);
+            }
+
             $handler = [$controller, $method];
         }
 
