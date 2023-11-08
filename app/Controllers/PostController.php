@@ -18,4 +18,9 @@ class PostController extends AbstractController
     {
         return $this->render('create_post.html.twig');
     }
+
+    public function store()
+    {
+        dd(111111);
+    }
 }
