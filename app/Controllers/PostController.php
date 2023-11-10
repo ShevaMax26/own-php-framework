@@ -34,7 +34,5 @@ class PostController extends AbstractController
         );
 
         $post = $this->service->save($post);
-
-        dd($post);
     }
 }
